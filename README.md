@@ -169,6 +169,26 @@ Si tu as perdu les identifiants :
 grep -E '^(SUNSHINE_WEB_USERNAME|SUNSHINE_WEB_PASSWORD)=' /opt/cloudypad/.env
 ```
 
+### Régénérer le mot de passe Sunshine
+
+Si le mot de passe a été partagé par erreur, ou si tu veux simplement en changer, régénère-le directement sur la VM :
+
+```bash
+NEW_PASS="$(openssl rand -base64 24 | tr -d '\n')"
+NEW_B64="$(printf '%s' "$NEW_PASS" | base64 | tr -d '\n')"
+
+sed -i "s#^SUNSHINE_WEB_PASSWORD=.*#SUNSHINE_WEB_PASSWORD=${NEW_PASS}#" /opt/cloudypad/.env
+sed -i "s#^SUNSHINE_WEB_PASSWORD_BASE64=.*#SUNSHINE_WEB_PASSWORD_BASE64=${NEW_B64}#" /opt/cloudypad/.env
+chmod 600 /opt/cloudypad/.env
+
+bash /root/deploy.sh restart
+grep -E '^SUNSHINE_WEB_(USERNAME|PASSWORD)=' /opt/cloudypad/.env
+```
+
+Les deux variables doivent être modifiées ensemble : `SUNSHINE_WEB_PASSWORD` est lue par le script, `SUNSHINE_WEB_PASSWORD_BASE64` est celle utilisée par le conteneur. Le `restart` recharge la configuration sans toucher aux jeux ni au pairing Moonlight (celui-ci repose sur un certificat, pas sur ce mot de passe).
+
+> Si tu as changé `CLOUDYPAD_DIR`, remplace `/opt/cloudypad` par ton chemin. Adapte aussi `/root/deploy.sh` si le script est installé ailleurs.
+
 ---
 
 ## 4. Ouvrir l'interface Sunshine

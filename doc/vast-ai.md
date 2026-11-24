@@ -99,6 +99,24 @@ bash /root/deploy.sh status
 nvidia-smi -L
 ```
 
+### Régénérer le mot de passe Sunshine
+
+Le mot de passe affiché par le script est aussi enregistré dans `/opt/cloudypad/.env`. Pour le remplacer (par exemple après l’avoir collé dans un chat ou un ticket), exécute sur la VM :
+
+```bash
+NEW_PASS="$(openssl rand -base64 24 | tr -d '\n')"
+NEW_B64="$(printf '%s' "$NEW_PASS" | base64 | tr -d '\n')"
+
+sed -i "s#^SUNSHINE_WEB_PASSWORD=.*#SUNSHINE_WEB_PASSWORD=${NEW_PASS}#" /opt/cloudypad/.env
+sed -i "s#^SUNSHINE_WEB_PASSWORD_BASE64=.*#SUNSHINE_WEB_PASSWORD_BASE64=${NEW_B64}#" /opt/cloudypad/.env
+chmod 600 /opt/cloudypad/.env
+
+bash /root/deploy.sh restart
+grep -E '^SUNSHINE_WEB_(USERNAME|PASSWORD)=' /opt/cloudypad/.env
+```
+
+Il faut mettre à jour `SUNSHINE_WEB_PASSWORD` **et** `SUNSHINE_WEB_PASSWORD_BASE64`, puis redémarrer le conteneur. Le pairing Moonlight déjà effectué reste valide : il utilise un certificat, pas ce mot de passe.
+
 ---
 
 ## 4. Accéder à Sunshine : Tailscale (recommandé)
