@@ -2,8 +2,6 @@
 
 Une minuscule plateforme de cloud gaming **autonome**, construite à partir des briques open-source de [Cloudy Pad](https://github.com/PierreBeucher/cloudypad).
 
-> Une petite landing page de présentation est disponible dans [`html/index.html`](html/index.html).
-
 Pas de base de données, pas de compte utilisateur, pas d'interface web à héberger : **un seul script**, lancé directement sur une machine GPU louée chez Vast.ai, TensorDock ou chez un fournisseur de VM classique, et tu joues via Moonlight.
 
 ```
