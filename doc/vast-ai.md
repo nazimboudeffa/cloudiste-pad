@@ -90,6 +90,21 @@ Puis, **dans la VM** :
 bash /root/deploy.sh deploy
 ```
 
+Ou plus simplement
+
+Sur ton PC :
+
+```bash
+ssh -i ~/.ssh/id_ed25519 -p <port-ssh> root@<ip-de-la-machine>
+```
+
+Puis, **dans la VM** :
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/nazimboudeffa/cloudiste-pad/main/deploy.sh -o deploy.sh
+bash deploy.sh deploy
+```
+
 Le script vérifie `nvidia-smi`, installe Docker et le NVIDIA Container Toolkit, puis démarre le conteneur `cloudy`. Note le **mot de passe Sunshine** affiché à la fin (il est aussi dans `/opt/cloudypad/.env`).
 
 Vérification rapide :
