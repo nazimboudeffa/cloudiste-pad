@@ -289,9 +289,11 @@ Variables d'environnement optionnelles :
 |---|---|
 | `CLOUDYPAD_IMAGE` | `ghcr.io/pierrebeucher/cloudypad/sunshine:0.46.0` |
 | `CLOUDYPAD_DIR` | `/opt/cloudypad` |
-| `CLOUDYPAD_SERVER_NAME` | `Cloudypad` |
+| `CLOUDYPAD_SERVER_NAME` | `Cloudiste PAD` |
 | `CLOUDYPAD_KEYBOARD_LAYOUT` | `fr` |
 | `CLOUDYPAD_LOCALE` | `fr_FR.UTF-8` |
+
+> `CLOUDYPAD_SERVER_NAME` est le nom affiché dans Moonlight. Sur une VM **déjà déployée**, le `.env` existant est conservé : modifie `SUNSHINE_SERVER_NAME` dans `/opt/cloudypad/.env`, puis relance `bash deploy.sh deploy` pour que Compose recrée le conteneur.
 
 ---
 

@@ -18,6 +18,7 @@ Légende : **Ajouté** · **Modifié** · **Corrigé** · **Supprimé**.
 
 ### Modifié
 
+- Nom par défaut affiché dans Moonlight : **Cloudiste PAD** au lieu de `Cloudypad` (`CLOUDYPAD_SERVER_NAME` / `SUNSHINE_SERVER_NAME`). Sur une VM déjà déployée, modifier `SUNSHINE_SERVER_NAME` dans `.env` puis relancer `deploy`.
 - README : prérequis **x86_64 / amd64** vérifié par `deploy.sh`.
 - README : régénération du mot de passe Sunshine via `bash deploy.sh deploy` (et non plus `restart`), avec explication du rôle des deux variables `.env`.
 - README : avertissement selon lequel `docker compose restart` ne relit pas `.env`, valable aussi pour le CSRF après installation de Tailscale.
