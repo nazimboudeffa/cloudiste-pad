@@ -20,7 +20,7 @@
 # Variables d'environnement optionnelles:
 #   CLOUDYPAD_IMAGE        image Docker (defaut: ghcr.io/pierrebeucher/cloudypad/sunshine:0.46.0)
 #   CLOUDYPAD_DIR          ou installer les fichiers (defaut: /opt/cloudypad)
-#   CLOUDYPAD_SERVER_NAME  nom affiche dans Moonlight (defaut: Cloudiste PAD)
+#   CLOUDYPAD_SERVER_NAME  nom affiche dans Moonlight (defaut: CloudistePAD)
 #   CLOUDYPAD_KEYBOARD_LAYOUT / CLOUDYPAD_LOCALE
 #
 # Prerequis: Ubuntu 22/24 amd64 avec driver NVIDIA DEJA installe (cas standard Vast/TensorDock).
@@ -131,7 +131,7 @@ CLOUDYPAD_LOCALE=${CLOUDYPAD_LOCALE:-fr_FR.UTF-8}
 CLOUDYPAD_SUNSHINE_ADDITIONAL_CONFIG=${CLOUDYPAD_SUNSHINE_ADDITIONAL_CONFIG:-}
 CLOUDYPAD_SUNSHINE_MAX_BITRATE=${CLOUDYPAD_SUNSHINE_MAX_BITRATE:-0}
 CLOUDYPAD_SUNSHINE_CSRF_ALLOWED_ORIGINS=${CLOUDYPAD_SUNSHINE_CSRF_ALLOWED_ORIGINS:-}
-SUNSHINE_SERVER_NAME=${CLOUDYPAD_SERVER_NAME:-Cloudiste PAD}
+SUNSHINE_SERVER_NAME=${CLOUDYPAD_SERVER_NAME:-CloudistePAD}
 SUNSHINE_WEB_USERNAME=cloudy
 SUNSHINE_WEB_PASSWORD=$password
 SUNSHINE_WEB_PASSWORD_BASE64=$(printf '%s' "$password" | base64 | tr -d '\n')
@@ -246,7 +246,7 @@ show_info() {
   cat <<EOF
 
 ============================================================
-  Cloudiste PAD est pret 🎮
+  CloudistePAD est pret 🎮
 ============================================================
 
   IP a utiliser    : $ip
