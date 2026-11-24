@@ -161,7 +161,7 @@ Le script :
 
 Durée : quelques minutes selon le débit du provider.
 
-À la fin, le script affiche l'IP publique, l'utilisateur `cloudy`, le mot de passe généré et les instructions de pairing.
+À la fin, le script affiche l'IP publique (ou l'IP Tailscale `100.x.y.z` si Tailscale est déjà installé), l'utilisateur `cloudy`, le mot de passe généré et les instructions de pairing.
 
 Si tu as perdu les identifiants :
 
@@ -188,6 +188,26 @@ grep -E '^SUNSHINE_WEB_(USERNAME|PASSWORD)=' /opt/cloudypad/.env
 Les deux variables doivent être modifiées ensemble : `SUNSHINE_WEB_PASSWORD` est lue par le script, `SUNSHINE_WEB_PASSWORD_BASE64` est celle utilisée par le conteneur. Le `restart` recharge la configuration sans toucher aux jeux ni au pairing Moonlight (celui-ci repose sur un certificat, pas sur ce mot de passe).
 
 > Si tu as changé `CLOUDYPAD_DIR`, remplace `/opt/cloudypad` par ton chemin. Adapte aussi `/root/deploy.sh` si le script est installé ailleurs.
+
+### Installer Tailscale après le déploiement
+
+`deploy.sh` détecte Tailscale pour afficher l'IP `100.x.y.z` et pour autoriser l'origine CSRF `https://100.x.y.z:47990`. Aucun redémarrage de la VM n'est nécessaire, mais un simple `restart` du conteneur ne suffit pas : il ne relit pas `.env`.
+
+| Situation | Commande |
+|---|---|
+| Tailscale installé avant le premier `deploy` | Rien de plus, le `deploy` initial a tout configuré. |
+| Tailscale installé après le premier `deploy` | `bash /root/deploy.sh csrf` |
+| Tu as seulement fait `bash /root/deploy.sh restart` | ❌ Ne suffit pas. |
+
+```bash
+tailscale up
+tailscale ip -4
+
+bash /root/deploy.sh csrf
+bash /root/deploy.sh deploy   # optionnel : rafraîchit l'affichage final
+```
+
+`write_env()` ne remplit le CSRF que si la variable est vide ; la commande `csrf` la remplace toujours et recrée le conteneur. Si elle répond « Origine manquante », vérifie `command -v tailscale` et `tailscale ip -4`, puis utilise `bash /root/deploy.sh csrf https://100.x.y.z:47990`. Voir [`doc/vast-ai.md`](doc/vast-ai.md) pour l'installation de Tailscale sur Vast.ai.
 
 ---
 

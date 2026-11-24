@@ -142,6 +142,41 @@ Installe Tailscale, connecte-toi au **même compte**, puis utilise l’IP `100.x
 
 > La doc Vast.ai recommande aussi Tailscale pour le streaming Moonlight sur ses templates *Ubuntu Desktop (VM)*.
 
+### Faut-il relancer `deploy.sh` après l’installation ?
+
+Le service `tailscaled` démarre tout seul : **aucun redémarrage de la VM n’est nécessaire**. En revanche, `deploy.sh` ne recalcule l’IP et l’origine CSRF que lorsque tu lances certaines commandes.
+
+| Moment de l’installation | Commande à lancer |
+|---|---|
+| Tailscale installé **avant** le premier `bash /root/deploy.sh deploy` | Rien de plus : le déploiement initial a déjà écrit `CLOUDYPAD_SUNSHINE_CSRF_ALLOWED_ORIGINS=https://100.x.y.z:47990`. |
+| Tailscale installé **après** le premier `deploy` (cas fréquent) | `bash /root/deploy.sh csrf` |
+| Tu as seulement fait `bash /root/deploy.sh restart` | ❌ **Ne suffit pas** : `restart` ne relit pas `.env` et ne met pas à jour l’origine CSRF. |
+
+Séquence complète quand Tailscale arrive après le déploiement :
+
+```bash
+tailscale up
+tailscale ip -4
+
+bash /root/deploy.sh csrf
+bash /root/deploy.sh deploy   # optionnel : rafraîchit seulement l’affichage final
+```
+
+Pourquoi cette différence : `write_env()` n’écrit l’origine CSRF que si `CLOUDYPAD_SUNSHINE_CSRF_ALLOWED_ORIGINS` est **vide**. La commande `csrf`, elle, remplace toujours la valeur et recrée le conteneur.
+
+Si `csrf` répond « Origine manquante », vérifie :
+
+```bash
+command -v tailscale
+tailscale ip -4
+```
+
+Puis passe l’origine en dur :
+
+```bash
+bash /root/deploy.sh csrf https://100.x.y.z:47990
+```
+
 ### Alternative sans Tailscale
 
 Dans les paramètres du template, section **Ports**, demande les ports internes :
