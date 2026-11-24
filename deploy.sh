@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 #
-# Cloudypad "one-pod" - script autonome pour une VM GPU RunPod / Vast / TensorDock.
+# Cloudypad "one-pod" - script autonome pour une VM GPU Vast / TensorDock / VM classique.
 #
 # Aucun backend, aucune base de donnees, aucun compte. Une seule machine, un seul
 # utilisateur. Le script tourne DIRECTEMENT sur la VM GPU louee.
 #
 # Usage:
 #   bash deploy.sh deploy     # installe et demarre (defaut si aucun argument)
-#   bash deploy.sh start      # redemarre le container
-#   bash deploy.sh stop       # arrete le container (Evite de payer le GPU)
+#   bash deploy.sh start      # demarre le container arrete
+#   bash deploy.sh stop       # arrete le container (n'arrete PAS la facturation de la VM)
 #   bash deploy.sh restart
 #   bash deploy.sh status
 #   bash deploy.sh logs       # suit les logs en direct
@@ -23,7 +23,7 @@
 #   CLOUDYPAD_SERVER_NAME  nom affiche dans Moonlight (defaut: Cloudypad)
 #   CLOUDYPAD_KEYBOARD_LAYOUT / CLOUDYPAD_LOCALE
 #
-# Prerequis: Ubuntu 22/24 avec driver NVIDIA DEJA installe (cas standard RunPod/Vast).
+# Prerequis: Ubuntu 22/24 amd64 avec driver NVIDIA DEJA installe (cas standard Vast/TensorDock).
 # Le script n'installe PAS le driver NVIDIA: il ne redemarre jamais la machine.
 #
 
@@ -54,7 +54,7 @@ need_root() {
 
 check_env() {
   command -v nvidia-smi >/dev/null 2>&1 \
-    || die "nvidia-smi introuvable. Ce script attend un driver NVIDIA deja installe (standard RunPod/Vast)."
+    || die "nvidia-smi introuvable. Ce script attend un driver NVIDIA deja installe (standard Vast.ai/TensorDock)."
   nvidia-smi -L >/dev/null 2>&1 \
     || die "nvidia-smi ne voit aucun GPU. Verifie le driver NVIDIA de la VM."
 
@@ -188,7 +188,7 @@ services:
     # Dans un conteneur, Xorg ne recoit pas les evenements de hotplug des
     # peripheriques uinput crees par Sunshine : la souris ne bouge pas.
     # On neutralise /dev/uinput pour forcer le fallback XTest de libvirtualhid,
-    # qui injection directement dans le serveur X (libXtst).
+    # qui injecte directement dans le serveur X (libXtst).
     volumes:
       - /dev/null:/dev/uinput
       - ${CLOUDYPAD_DATA_DIR}:/cloudy/data
@@ -261,7 +261,7 @@ show_info() {
      Saisis le PIN affiche par Moonlight dans l'UI Sunshine.
      Erreur "CSRF Protection Error" ? lance: bash $0 csrf
 
-  Ports a ouvrir dans le firewall RunPod/Vast:
+  Ports a ouvrir dans le firewall du provider:
     TCP  : 22, 47984, 47989, 47990, 48010
     UDP  : 47998, 47999, 48000, 48002
 

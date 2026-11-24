@@ -21,6 +21,8 @@ Pas de base de données, pas de compte utilisateur, pas d'interface web à hébe
 
 > ⚠️ **Les Pods RunPod et les orders Docker Clore.ai ne conviennent pas à Moonlight** : ce sont des conteneurs (pas de Docker Compose) et ils ne supportent pas les ports UDP nécessaires au streaming. Voir les sections « Choix du fournisseur » et « Déploiement depuis GitHub / RunPod ».
 
+> 🗺️ Versions, jalons et idées à venir : [`doc/feuille-de-route.md`](doc/feuille-de-route.md) · historique : [`doc/CHANGELOG.md`](doc/CHANGELOG.md).
+
 ---
 
 ## Choix du fournisseur
@@ -68,7 +70,7 @@ Exemple : 3 h de jeu par semaine sur une 1660 Super à $0,05/h → environ **$0,
 
 ### Sur la VM GPU
 
-- **Ubuntu 22.04 ou 24.04**
+- **Ubuntu 22.04 ou 24.04**, architecture **x86_64 / amd64** (vérifiée par `deploy.sh`)
 - **Driver NVIDIA déjà installé** (cas standard chez Vast.ai / TensorDock)
 - **4 CPU / 8 Go RAM** minimum
 - Une **IP publique**
@@ -181,11 +183,13 @@ sed -i "s#^SUNSHINE_WEB_PASSWORD=.*#SUNSHINE_WEB_PASSWORD=${NEW_PASS}#" /opt/clo
 sed -i "s#^SUNSHINE_WEB_PASSWORD_BASE64=.*#SUNSHINE_WEB_PASSWORD_BASE64=${NEW_B64}#" /opt/cloudypad/.env
 chmod 600 /opt/cloudypad/.env
 
-bash /root/deploy.sh restart
+bash /root/deploy.sh deploy
 grep -E '^SUNSHINE_WEB_(USERNAME|PASSWORD)=' /opt/cloudypad/.env
 ```
 
-Les deux variables doivent être modifiées ensemble : `SUNSHINE_WEB_PASSWORD` est lue par le script, `SUNSHINE_WEB_PASSWORD_BASE64` est celle utilisée par le conteneur. Le `restart` recharge la configuration sans toucher aux jeux ni au pairing Moonlight (celui-ci repose sur un certificat, pas sur ce mot de passe).
+Les deux variables doivent être modifiées ensemble : `SUNSHINE_WEB_PASSWORD` est lue par le script (affichage final), `SUNSHINE_WEB_PASSWORD_BASE64` est celle utilisée par le conteneur. Relance `deploy` pour que Docker Compose relise `.env` et recrée le conteneur si besoin : les données (jeux, sauvegardes) et le pairing Moonlight ne sont pas touchés (le pairing repose sur un certificat, pas sur ce mot de passe).
+
+> ⚠️ `bash deploy.sh restart` ne suffit **pas** : `docker compose restart` ne relit pas `.env` et garde les variables d'environnement du conteneur existant. C'est la même raison pour laquelle il faut `csrf` après l'installation de Tailscale (voir ci-dessous).
 
 > Si tu as changé `CLOUDYPAD_DIR`, remplace `/opt/cloudypad` par ton chemin. Adapte aussi `/root/deploy.sh` si le script est installé ailleurs.
 
@@ -273,6 +277,7 @@ bash deploy.sh stop       # arrête le conteneur
 bash deploy.sh restart
 bash deploy.sh status
 bash deploy.sh logs       # suit les logs en direct
+bash deploy.sh csrf [url] # autorise l'origine de pairing (Tailscale/NAT)
 bash deploy.sh destroy    # supprime le conteneur, garde les données
 bash deploy.sh purge      # supprime le conteneur ET les données
 bash deploy.sh help
