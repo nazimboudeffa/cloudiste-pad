@@ -211,6 +211,59 @@ avec facturation en euros et acceptes un budget supérieur.
 
 **Verdict :** écarter pour le budget actuel.
 
+### F. Paperspace --- vraie VM GPU persistante, mais trop chère pour ton budget
+
+Paperspace (désormais documenté dans l'écosystème DigitalOcean) mérite
+d'être inclus car son produit **Machines** est bien une machine
+virtuelle Linux ou Windows avec GPU, stockage persistant, possibilité
+d'ajouter une IP publique et accès SSH. Ce n'est donc pas seulement une
+offre de notebooks ou de conteneurs IA. Les régions Machines incluent
+Amsterdam (AMS1), ce qui est intéressant depuis la France.
+[Documentation
+Machines](https://docs.digitalocean.com/products/paperspace/) ·
+[Régions](https://github.com/Paperspace/CORE-API-Docs/blob/master/api-documentation/machines/README.md).
+
+**Tarifs GPU horaires publiés** (prix en dollars, hors stockage et IP)
+: - M4000 : **0,45 \$/h** - P4000 : **0,51 \$/h** - RTX4000 : **0,56
+\$/h** - P5000 : **0,78 \$/h** - A4000 : **0,76 \$/h** - A5000 : **1,38
+\$/h**
+
+Même le modèle GPU le moins cher dépasse déjà ton plafond de 0,30 €/h
+avant conversion, stockage et IP. Les GPU proposés sont par ailleurs des
+cartes workstation/datacenter plutôt que les GeForce RTX 3060/3090 que
+je privilégierais pour un PC gaming distant. La page tarifaire décrit
+certains modèles comme adaptés aux applications 3D et au gaming, mais
+cela ne garantit pas une expérience Sunshine/Moonlight optimisée.
+[Tarifs
+officiels](https://docs.digitalocean.com/products/paperspace/pricing/).
+
+**Points positifs** - VM Linux complète et stockage persistant. - SSH et
+possibilité d'ajouter une IP publique. - Datacenter d'Amsterdam, donc
+potentiellement une latence correcte depuis la France. - La facturation
+du calcul GPU s'arrête lorsque la machine est éteinte ; le stockage
+attaché et l'IP publique continuent toutefois à être facturés. Pour
+supprimer tous les frais, il faut détruire les ressources. [Règles de
+facturation](https://docs.digitalocean.com/products/paperspace/pricing/)
+· [Gestion des IP
+publiques](https://docs.digitalocean.com/products/paperspace/machines/how-to/manage-public-ips/).
+
+**Points de vigilance** - Le tarif minimal GPU publié est 0,45 \$/h :
+hors budget. - Facturation en USD, pas en euros. - Les templates Windows
+ont été dépréciés pour les nouveaux utilisateurs ; privilégier une VM
+Linux et installer les composants nécessaires. [État des produits
+Paperspace](https://docs.digitalocean.com/products/paperspace/). - Je
+n'ai pas trouvé de confirmation officielle suffisante que les ports UDP
+Sunshine requis soient ouverts sans restriction. Il faut demander
+confirmation avant de commander. - La documentation présente les
+Machines comme orientées HPC/IA ; ce n'est pas une offre commercialisée
+spécifiquement comme PC gaming cloud.
+
+**Verdict :** Paperspace est techniquement plus crédible que les
+plateformes de conteneurs GPU, car il fournit une vraie VM persistante
+avec région européenne. En revanche, il ne correspond pas à ton budget
+ni à ta préférence de facturation en euros. Je le classerais comme
+**solution de repli pour un test**, pas comme recommandation principale.
+
 ### E. RunPod, Clore.ai, VRAMfarm et SaladCloud
 
 Ces services peuvent être intéressants pour louer de la puissance GPU,
@@ -356,6 +409,11 @@ Envoyer ces questions au fournisseur ou à l'hôte avant tout paiement :
     cloud](https://vramfarm.com/en/compare/)
 -   [GPU Radar --- offres GPU en
     Europe](https://www.gpuradar.eu/hosting)
+
+**Note Paperspace :** les prix GPU cités proviennent du barème officiel
+publié par Paperspace/DigitalOcean et sont en USD. La facturation GPU
+s'arrête à l'extinction de la machine, mais stockage et IP restent
+facturés tant qu'ils sont attachés.
 
 **Note méthodologique :** les pages de comparaison et les catalogues
 évoluent rapidement. Les prix sont des instantanés et certains
