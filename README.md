@@ -1,4 +1,4 @@
-# Libre Cloud Gaming
+# CloudistePAD - Cloud Gaming Libre et Autonome
 
 Une minuscule plateforme de cloud gaming **autonome**, construite à partir des briques open-source de [Cloudy Pad](https://github.com/PierreBeucher/cloudypad).
 
