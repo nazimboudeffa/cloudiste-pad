@@ -130,6 +130,15 @@ taxes et éventuels frais de stockage.
                                                                   conteneurs       selon                    GPU sur                              d'une VM complète, d'une
                                                                                    disponibilité       comparateurs                              IP publique et des ports
                                                                                                                                                  UDP entrants
+
+  [Paperspace](https://www.paperspace.com/)                       VM GPU           M4000, P4000,   0,45 à 1,38 \$/h USD            Amsterdam     **Repli pour un test** : vraie VM
+                                                                  (Machines)       RTX4000, A4000, GPU seul, hors                  (AMS1)        persistante avec SSH, mais hors
+                                                                                   A5000           stockage et IP                                budget ; ports UDP à confirmer
+
+  [NovaPod](https://novapod.io/)                                  Marketplace GPU  RTX 3090, 4090, Prix « ask »     Crypto         Non précisé   **À vérifier** : seule l'option KVM
+                                                                  (pods Docker ou  5090 repérées ; variables, facturés (USDT, USDC,                 root (IP publique, ports
+                                                                  VM KVM root)     RTX 3060 non    à la seconde ;   ETH, SOL, BNB)               entrants ouverts selon le site)
+                                                                                   vérifiée        RTX non relevés                               est pertinente ; paiement crypto
   -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ### Lecture du tableau
@@ -143,6 +152,11 @@ taxes et éventuels frais de stockage.
 -   **Solutions cloud datacenter :** Scaleway et OVHcloud sont solides
     pour des VM GPU, mais leurs tarifs GPU relevés dépassent ton plafond
     de 0,30 €/h.
+-   **Paperspace :** vraie VM persistante à Amsterdam, mais à partir de
+    0,45 $/h pour le GPU seul, donc hors budget et en dollars.
+-   **NovaPod :** marketplace à tarifs « live » facturés à la seconde,
+    paiement uniquement en crypto. Seule son option VM KVM root est
+    envisageable pour CloudistePAD.
 -   **Offres conteneurisées :** elles ne sont pas interchangeables avec
     une VM gaming. Une image Docker avec GPU ne suffit pas à faire
     fonctionner un bureau complet, Steam, Sunshine et les connexions
@@ -211,7 +225,7 @@ avec facturation en euros et acceptes un budget supérieur.
 
 **Verdict :** écarter pour le budget actuel.
 
-### F. Paperspace --- vraie VM GPU persistante, mais trop chère pour ton budget
+### E. Paperspace --- vraie VM GPU persistante, mais trop chère pour ton budget
 
 Paperspace (désormais documenté dans l'écosystème DigitalOcean) mérite
 d'être inclus car son produit **Machines** est bien une machine
@@ -264,7 +278,40 @@ avec région européenne. En revanche, il ne correspond pas à ton budget
 ni à ta préférence de facturation en euros. Je le classerais comme
 **solution de repli pour un test**, pas comme recommandation principale.
 
-### E. RunPod, Clore.ai, VRAMfarm et SaladCloud
+### F. NovaPod --- marketplace crypto, seule l'option KVM est envisageable
+
+*Informations relevées sur le site officiel le 26 novembre 2026 ; je n'ai
+pas pu en vérifier les affirmations de façon indépendante.*
+
+NovaPod propose deux modes : des **pods Docker** (démarrage en moins de
+15 s) et des **VM KVM root** avec disque NVMe persistant, IPv4 publique
+dédiée et pare-feu configurable. Le site annonce Ubuntu 24.04, Debian 12
+ou Windows Server GPU, et une facturation à la seconde. Une VM arrêtée
+ne coûte que le stockage « en veille ». [Site
+NovaPod](https://novapod.io/) · [Documentation](https://docs.novapod.io)
+
+**Points positifs** - L'option KVM correspond au profil requis : VM
+complète, root/SSH, IP publique, persistance du disque. - Facturation à
+la seconde, sans minimum ni engagement. - Des GeForce (RTX 3090, 4090,
+5090) sont citées parmi les GPU disponibles.
+
+**Points de vigilance** - **Paiement uniquement en crypto** (USDT, USDC,
+ETH, SOL, BNB) : pas de facturation en euros ni de facture avec TVA
+classique, ce qui va à l'encontre de ta préférence. - Je n'ai pas relevé
+de prix pour une GeForce adaptée (RTX 3060 ou équivalent) : les tarifs
+sont des « asks » en direct, et les montants mis en avant concernent
+surtout des GPU datacenter. - Aucune région européenne n'est indiquée
+sur la page d'accueil. - Les pods Docker sont à écarter pour Sunshine
+(redirection de ports dynamique, noyau partagé). - Les ports UDP
+Sunshine ne sont pas explicitement confirmés : le site mentionne
+seulement des « ports entrants ouverts » sur les KVM. - Le dépôt
+CloudistePAD ne mentionne pas ce fournisseur.
+
+**Verdict :** à tester uniquement si le paiement en crypto ne te gêne
+pas et si une RTX 3060/3090 en KVM s'affiche sous 0,30 \$/h. À défaut,
+il reste derrière Vast.ai et TensorDock.
+
+### G. RunPod, Clore.ai, VRAMfarm et SaladCloud
 
 Ces services peuvent être intéressants pour louer de la puissance GPU,
 lancer des conteneurs ou exécuter des applications IA. Mais CloudistePAD
@@ -403,6 +450,9 @@ Envoyer ces questions au fournisseur ou à l'hôte avant tout paiement :
 -   [Hetzner](https://www.hetzner.com/)
 -   [Infomaniak](https://www.infomaniak.com/)
 -   [SaladCloud](https://salad.com/)
+-   [Paperspace](https://www.paperspace.com/)
+-   [NovaPod](https://novapod.io/) et sa
+    [documentation](https://docs.novapod.io)
 -   [Panorama des GPU cloud en Europe --- tarifs et
     régions](https://vramfarm.com/fr/blog/gpu-cloud-europe/)
 -   [Comparatif de fournisseurs GPU
